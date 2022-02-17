@@ -6,7 +6,7 @@ from discord.ext.commands import has_permissions, CheckFailure
 import sqlite3
 from tabulate import tabulate
 import dbexec
-
+import asyncio
 
 con = sqlite3.connect('database.db')
 c = con.cursor()
@@ -20,9 +20,272 @@ roletouse = ""
 
 def botpr1(token):
     try:
+
         @bot.event
         async def on_ready():
             print("BOT ON")
+
+        @bot.command(name="stone55")
+        async def regstone1(ctx, andar: int, ticket: int):
+            try:
+                number = ticket * 1
+                date = time.strftime('%H:%M:%S', time.localtime())
+                name = ctx.message.author.display_name
+                if number < 0:
+                    await ctx.send('O Numero de tickets não pode ser menor que 0!')
+                elif number > 9000:
+                    await ctx.send('Limite de tickets:5')
+                else:
+                    c.execute("SELECT discord_role_name FROM dsbot_roles")
+                    roleuse = str(c.fetchone()[0])
+                    role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                    if role in ctx.author.roles:
+                        try:
+                            c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                            c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                            c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                            c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                            c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                            c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                            c.execute("INSERT INTO dsbot VALUES ('" + str(
+                                ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                            con.commit()
+                        except:
+                            ...
+                        df = pd.read_sql(
+                            'SELECT discord_name, date, ticket, plocal FROM dsbot WHERE plocal = "Stone I"',
+                            con)
+                        df = df.rename(columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                                'plocal': 'Local'})
+                        output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                            headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                     "Local"]) + "```")
+                        embed = discord.Embed(
+                            title="Praça Mágica 1F",
+                            description="Veja quem esta farmando em tempo real",
+                            color=discord.Color.blue())
+                        embed.set_thumbnail(
+                            url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                        embed.add_field(name="" + output + "", value="Você ingressou na praça!", inline=False)
+                        # embed.set_footer(text="Você ingressou na praça!")
+                        await ctx.send(embed=embed, delete_after=30)
+                        print("Stone I - " + name + " entrou na praça mágica 1F" + " (" + date + ")")
+                    if andar == 2:
+                        c.execute("SELECT discord_role_name FROM dsbot_roles")
+                        roleuse = str(c.fetchone()[0])
+                        role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                        if role in ctx.author.roles:
+                            name = ctx.message.author.display_name
+                            date = time.strftime('%H:%M:%S', time.localtime())
+                            try:
+                                c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                                c.execute("INSERT INTO dsbot_p2 VALUES ('" + str(
+                                    ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                                con.commit()
+                            except:
+                                ...
+                            df = pd.read_sql(
+                                'SELECT discord_name, date, ticket, plocal FROM dsbot_p2 WHERE plocal = "Stone I"',
+                                con)
+                            df = df.rename(
+                                columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                         'plocal': 'Local'})
+                            output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                                headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                         "Local"]) + "```")
+                            embed = discord.Embed(
+                                title="Praça Mágica 2F",
+                                description="Veja quem esta farmando em tempo real",
+                                color=discord.Color.blue())
+                            embed.set_thumbnail(
+                                url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                            embed.add_field(name="" + output + "", value="Você ingressou na praça 2F!", inline=False)
+                            # embed.set_footer(text="Você ingressou na praça!")
+                            await ctx.send(embed=embed, delete_after=30)
+                            print("Stone I - " + name + " entrou na praça mágica 2F" + " (" + date + ")")
+                    if andar == 3:
+                        c.execute("SELECT discord_role_name FROM dsbot_roles")
+                        roleuse = str(c.fetchone()[0])
+                        role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                        if role in ctx.author.roles:
+                            name = ctx.message.author.display_name
+                            date = time.strftime('%H:%M:%S', time.localtime())
+                            try:
+                                c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                                c.execute("INSERT INTO dsbot_p3 VALUES ('" + str(
+                                    ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                                con.commit()
+                            except:
+                                ...
+                            df = pd.read_sql(
+                                'SELECT discord_name, date, ticket, plocal FROM dsbot_p3 WHERE plocal = "Stone I"',
+                                con)
+                            df = df.rename(
+                                columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                         'plocal': 'Local'})
+                            output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                                headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                         "Local"]) + "```")
+                            embed = discord.Embed(
+                                title="Praça Mágica 3F",
+                                description="Veja quem esta farmando em tempo real",
+                                color=discord.Color.blue())
+                            embed.set_thumbnail(
+                                url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                            embed.add_field(name="" + output + "", value="Você ingressou na praça 3F!", inline=False)
+                            # embed.set_footer(text="Você ingressou na praça!")
+                            await ctx.send(embed=embed, delete_after=30)
+                            print("Stone I - " + name + " entrou na praça mágica 3F" + " (" + date + ")")
+                    if andar == 4:
+                        c.execute("SELECT discord_role_name FROM dsbot_roles")
+                        roleuse = str(c.fetchone()[0])
+                        role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                        if role in ctx.author.roles:
+                            name = ctx.message.author.display_name
+                            date = time.strftime('%H:%M:%S', time.localtime())
+                            try:
+                                c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                                c.execute("INSERT INTO dsbot_p4 VALUES ('" + str(
+                                    ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                                con.commit()
+                            except:
+                                ...
+                            df = pd.read_sql(
+                                'SELECT discord_name, date, ticket, plocal FROM dsbot_p4 WHERE plocal = "Stone I"',
+                                con)
+                            df = df.rename(
+                                columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                         'plocal': 'Local'})
+                            output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                                headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                         "Local"]) + "```")
+                            embed = discord.Embed(
+                                title="Praça Mágica 4F",
+                                description="Veja quem esta farmando em tempo real",
+                                color=discord.Color.blue())
+                            embed.set_thumbnail(
+                                url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                            embed.add_field(name="" + output + "", value="Você ingressou na praça 4F!", inline=False)
+                            # embed.set_footer(text="Você ingressou na praça!")
+                            await ctx.send(embed=embed, delete_after=30)
+                            print("Stone I - " + name + " entrou na praça mágica 4F" + " (" + date + ")")
+                    if andar == 5:
+                        c.execute("SELECT discord_role_name FROM dsbot_roles")
+                        roleuse = str(c.fetchone()[0])
+                        role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                        if role in ctx.author.roles:
+                            name = ctx.message.author.display_name
+                            date = time.strftime('%H:%M:%S', time.localtime())
+                            try:
+                                c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                                c.execute("INSERT INTO dsbot_p5 VALUES ('" + str(
+                                    ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                                con.commit()
+                            except:
+                                ...
+                            df = pd.read_sql(
+                                'SELECT discord_name, date, ticket, plocal FROM dsbot_p5 WHERE plocal = "Stone I"',
+                                con)
+                            df = df.rename(
+                                columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                         'plocal': 'Local'})
+                            output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                                headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                         "Local"]) + "```")
+                            embed = discord.Embed(
+                                title="Praça Mágica 5F",
+                                description="Veja quem esta farmando em tempo real",
+                                color=discord.Color.blue())
+                            embed.set_thumbnail(
+                                url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                            embed.add_field(name="" + output + "", value="Você ingressou na praça 5F!", inline=False)
+                            # embed.set_footer(text="Você ingressou na praça!")
+                            await ctx.send(embed=embed, delete_after=30)
+                            print("Stone I - " + name + " entrou na praça mágica 5F" + " (" + date + ")")
+
+                    if andar == 6:
+                        c.execute("SELECT discord_role_name FROM dsbot_roles")
+                        roleuse = str(c.fetchone()[0])
+                        role = discord.utils.get(ctx.guild.roles, name=roleuse)
+                        if role in ctx.author.roles:
+                            name = ctx.message.author.display_name
+                            date = time.strftime('%H:%M:%S', time.localtime())
+                            try:
+                                c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                                c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                                c.execute("INSERT INTO dsbot_p6 VALUES ('" + str(
+                                    ctx.author.id) + "','" + name + "','" + date + "','" + str(ticket) + "','Stone I')")
+                                con.commit()
+                            except:
+                                ...
+                            df = pd.read_sql(
+                                'SELECT discord_name, date, ticket, plocal FROM dsbot_p6 WHERE plocal = "Stone I"',
+                                con)
+                            df = df.rename(
+                                columns={'discord_name': 'Nome', 'date': 'Hora de inicio', 'ticket': 'Tickets',
+                                         'plocal': 'Local'})
+                            output = ("```" + "\n\n" + tabulate(df, tablefmt="plain",
+                                                                headers=["#", "Nome", "Hora de inicio", "Tickets",
+                                                                         "Local"]) + "```")
+                            embed = discord.Embed(
+                                title="Praça Mágica 6F",
+                                description="Veja quem esta farmando em tempo real",
+                                color=discord.Color.blue())
+                            embed.set_thumbnail(
+                                url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhrN6cunsqQ1kJ8nyVEBu3n-R2UXX7l6pbCS7mkg0PiSLe3_HLDO8iMxV5rpSnI8QGuZ0&usqp=CAU")
+                            embed.add_field(name="" + output + "", value="Você ingressou na praça 6F!", inline=False)
+                            # embed.set_footer(text="Você ingressou na praça!")
+                            await ctx.send(embed=embed, delete_after=30)
+                            print("Stone I - " + name + " entrou na praça mágica 6F" + " (" + date + ")")
+                    while number != 0:
+                        number -= 1
+                        #await message.edit(content=ticket)
+                        await asyncio.sleep(1)
+                    c.execute("DELETE FROM dsbot WHERE discord_name = '" + name + "'")
+                    c.execute("DELETE FROM dsbot_p2 WHERE discord_name = '" + name + "'")
+                    c.execute("DELETE FROM dsbot_p3 WHERE discord_name = '" + name + "'")
+                    c.execute("DELETE FROM dsbot_p4 WHERE discord_name = '" + name + "'")
+                    c.execute("DELETE FROM dsbot_p5 WHERE discord_name = '" + name + "'")
+                    c.execute("DELETE FROM dsbot_p6 WHERE discord_name = '" + name + "'")
+                    con.commit()
+                    print("Excluido")
+                    #await message.edit(content='Ended!')
+
+
+            except ValueError:
+                await ctx.send('time was not a number')
+
+
+
+
+
+
+
+
 
         @bot.command(name='editperm', pass_context=True)
         @has_permissions(administrator=True, manage_messages=True, manage_roles=True)
